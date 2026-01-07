@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodrigo Novich | Solucionador Visual</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --lima: #32FF00;
+            --rojo: #FF3B3B;
+            --oscuro: #0a0a0a;
+            --gris: #1a1a1a;
+            --blanco: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--oscuro);
+            color: var(--blanco);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVEGACIÓN --- */
+        header {
+            padding: 25px 5%;
+            background: rgba(10, 10, 10, 0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .logo span { color: var(--lima); }
+
+        nav ul { display: flex; list-style: none; align-items: center; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { text-decoration: none; color: var(--blanco); font-weight: 500; transition: 0.3s; }
+        nav ul li a:hover { color: var(--lima); }
+
+        .btn-contacto {
+            background: var(--rojo);
+            padding: 10px 20px;
+            border-radius: 2px;
+            color: white !important;
+        }
+
+        /* --- HERO --- */
+        #hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+            margin-top: 60px;
+        }
+
+        h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 1; margin-bottom: 20px; }
+        .txt-lima { color: var(--lima); }
+
+        /* --- EXPOSICIÓN (GALERÍA) --- */
+        #exposicion { padding: 100px 5%; }
+        .header-expo { margin-bottom: 50px; border-left: 4px solid var(--lima); padding-left: 20px; }
+        .header-expo h2 { font-size: 2.5rem; text-transform: uppercase; }
+
+        .galeria-expo {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 250px;
+            gap: 20px;
+        }
+
+        .expo-item {
+            position: relative;
+            background: var(--gris);
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid #333;
+        }
+
+        /* Clases de formato */
+        .landscape { grid-column: span 2; grid-row: span 2; }
+        .portrait { grid-column: span 1; grid-row: span 3; }
+        .featured { grid-column: span 2; grid-row: span 3; }
+
+        .expo-img {
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%);
+            transition: 0.6s ease;
+        }
+
+        .expo-item:hover .expo-img { filter: grayscale(0%); transform: scale(1.05); }
+
+        .expo-info {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 25px; background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            opacity: 0; transition: 0.4s;
+        }
+
+        .expo-item:hover .expo-info { opacity: 1; }
+        .tag { background: var(--lima); color: black; padding: 3px 10px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
+
+        /* --- SOBRE MÍ --- */
+        #sobre-mi { padding: 120px 5%; background: var(--gris); border-top: 5px solid var(--rojo); }
+        .container-sm { max-width: 900px; }
+        #sobre-mi h2 { color: var(--lima); margin-bottom: 30px; font-size: 3rem; }
+        #sobre-mi p { font-size: 1.4rem; font-weight: 300; }
+
+        /* --- CONTACTO --- */
+        #contacto { padding: 100px 5%; }
+        .form-contacto { max-width: 600px; margin-top: 40px; display: flex; flex-direction: column; gap: 20px; }
+        .input-group label { display: block; color: var(--lima); font-weight: 700; margin-bottom: 8px; font-size: 0.8rem; text-transform: uppercase; }
+        .input-group input, .input-group textarea {
+            width: 100%; background: #111; border: 1px solid #333; padding: 15px; color: white; font-family: inherit;
+        }
+        .btn-enviar { background: var(--rojo); color: white; padding: 20px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .btn-enviar:hover { background: white; color: var(--rojo); }
+
+        /* --- FOOTER & SOCIAL --- */
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid #222; }
+        .social-links { margin-bottom: 20px; }
+        .social-links a { color: var(--blanco); margin: 0 15px; text-decoration: none; font-weight: 700; transition: 0.3s; }
+        .social-links a:hover { color: var(--rojo); }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); justify-content: center; align-items: center;
+        }
+        #lightbox.activo { display: flex; }
+        .lightbox-img { max-width: 90%; max-height: 80vh; border: 3px solid var(--lima); }
+        .cerrar-lightbox { position: absolute; top: 20px; right: 30px; font-size: 3rem; cursor: pointer; color: var(--rojo); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .galeria-expo { grid-template-columns: 1fr; grid-auto-rows: 300px; }
+            .landscape, .portrait, .featured { grid-column: span 1; grid-row: auto; }
+            h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">RODRIGO<span>NOVICH</span></div>
+            <ul>
+                <li><a href="#exposicion">Exposición</a></li>
+                <li><a href="#sobre-mi">Sobre mí</a></li>
+                <li><a href="#contacto" class="btn-contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <h1>Soluciones <br>Visuales con <span class="txt-lima">Impacto.</span></h1>
+        <p>Branding Estratégico | Diseño Editorial | Producción Audiovisual</p>
+    </section>
+
+    <section id="exposicion">
+        <div class="header-expo">
+            <h2>Exposición de Proyectos</h2>
+            <p>Haz clic en cualquier pieza para entrar en modo detalle.</p>
+        </div>
+        <div class="galeria-expo">
+            <div class="expo-item landscape" data-full="img/proyecto1.jpg">
+                <div class="expo-img" style="background-image: url('img/proyecto1.jpg');"></div>
+                <div class="expo-info"><span class="tag">Branding</span><h3>Identidad Corporativa</h3></div>
+            </div>
+            <div class="expo-item portrait" data-full="img/proyecto2.jpg">
+                <div class="expo-img" style="background-image: url('img/proyecto2.jpg');"></div>
+                <div class="expo-info"><span class="tag">Editorial</span><h3>Diseño de Revista</h3></div>
+            </div>
+            <div class="expo-item portrait" data-full="img/proyecto3.jpg">
+                <div class="expo-img" style="background-image: url('img/proyecto3.jpg');"></div>
+                <div class="expo-info"><span class="tag">Audiovisual</span><h3>Spot Publicitario</h3></div>
+            </div>
+            <div class="expo-item featured" data-full="img/proyecto4.jpg">
+                <div class="expo-img" style="background-image: url('img/proyecto4.jpg');"></div>
+                <div class="expo-info"><span class="tag">Destacado</span><h3>Proyecto 360°</h3></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre-mi">
+        <div class="container-sm">
+            <h2>Sobre mí</h2>
+            <p>Soy <strong>Rodrigo Novich</strong>. Me considero un solucionador de problemas visuales. Mi enfoque combina la estética con la funcionalidad para conectar de forma real con la audiencia. Ayudo a marcas y proyectos a encontrar su voz a través del diseño estratégico, transformando conceptos complejos en piezas visuales de alto impacto.</p>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <h2>¿Hablamos de tu proyecto?</h2>
+        <form class="form-contacto">
+            <div class="input-group">
+                <label>Tu Nombre</label>
+                <input type="text" required>
+            </div>
+            <div class="input-group">
+                <label>Tu Email</label>
+                <input type="email" required>
+            </div>
+            <div class="input-group">
+                <label>Mensaje</label>
+                <textarea rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn-enviar">Enviar Propuesta</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">TikTok</a>
+            <a href="#">YouTube</a>
+        </div>
+        <p>© 2026 Rodrigo Novich | Solucionador Visual</p>
+    </footer>
+
+    <div id="lightbox">
+        <span class="cerrar-lightbox">&times;</span>
+        <img class="lightbox-img" src="" alt="Zoom">
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const items = document.querySelectorAll('.expo-item');
+        const cerrar = document.querySelector('.cerrar-lightbox');
+
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                const fullImg = item.getAttribute('data-full');
+                lightboxImg.src = fullImg;
+                lightbox.classList.add('activo');
+            });
+        });
+
+        cerrar.addEventListener('click', () => {
+            lightbox.classList.remove('activo');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if(e.target === lightbox) lightbox.classList.remove('activo');
+        });
+    </script>
+</body>
+</html>
